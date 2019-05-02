@@ -1,0 +1,982 @@
+Grammar
+
+    0 $accept: include $end
+
+    1 include: raiz
+    2        | libreria include
+
+    3 raiz: %empty
+    4     | comment raiz
+    5     | sentencia raiz
+    6     | print raiz
+    7     | bucles CA raiz CC raiz
+    8     | condicional CA raiz CC raiz
+    9     | funcion CA raiz CC raiz
+
+   10 libreria: '%' SINTLIB '"' LIBRERIA '"'
+
+   11 bucles: MIENTRAS cond
+   12       | FOR EACH variable IN NUM
+
+   13 condicional: SI cond DO
+
+   14 funcion: FUNCION VAR '(' parametros ')' '$' parametros
+
+   15 parametros: VAR
+   16           | VAR ',' parametros
+
+   17 variable: VAR variable
+   18         | VAR
+
+   19 comment: '&' variable '&'
+
+   20 print: PRINT '"' variable '"'
+
+   21 cond: two MAYOR two
+   22     | two MENOR two
+   23     | two IGUAL two
+
+   24 two: NUM
+   25    | VAR
+
+   26 sentencia: VAR IGUAL expr
+
+   27 expr: expr MAS term
+   28     | expr MENOS term
+   29     | term
+
+   30 term: fact
+   31     | term MULT fact
+   32     | term DIV fact
+
+   33 fact: NUM
+   34     | VAR
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'"' (34) 10 20
+'$' (36) 14
+'%' (37) 10
+'&' (38) 19
+'(' (40) 14
+')' (41) 14
+',' (44) 16
+error (256)
+VAR (258) 14 15 16 17 18 25 26 34
+NUM (259) 12 24 33
+FUNCION (260) 14
+PRINT (261) 20
+SI (262) 13
+MAYOR (263) 21
+MENOR (264) 22
+IGUAL (265) 23 26
+DO (266) 13
+MIENTRAS (267) 11
+FOR (268) 12
+EACH (269) 12
+IN (270) 12
+SINTLIB (271) 10
+LIBRERIA (272) 10
+CA (273) 7 8 9
+CC (274) 7 8 9
+MULT (275) 31
+MENOS (276) 28
+MAS (277) 27
+DIV (278) 32
+
+
+Nonterminals, with rules where they appear
+
+$accept (31)
+    on left: 0
+include (32)
+    on left: 1 2, on right: 0 2
+raiz (33)
+    on left: 3 4 5 6 7 8 9, on right: 1 4 5 6 7 8 9
+libreria (34)
+    on left: 10, on right: 2
+bucles (35)
+    on left: 11 12, on right: 7
+condicional (36)
+    on left: 13, on right: 8
+funcion (37)
+    on left: 14, on right: 9
+parametros (38)
+    on left: 15 16, on right: 14 16
+variable (39)
+    on left: 17 18, on right: 12 17 19 20
+comment (40)
+    on left: 19, on right: 4
+print (41)
+    on left: 20, on right: 6
+cond (42)
+    on left: 21 22 23, on right: 11 13
+two (43)
+    on left: 24 25, on right: 21 22 23
+sentencia (44)
+    on left: 26, on right: 5
+expr (45)
+    on left: 27 28 29, on right: 26 27 28
+term (46)
+    on left: 30 31 32, on right: 27 28 29 31 32
+fact (47)
+    on left: 33 34, on right: 30 31 32
+
+
+State 0
+
+    0 $accept: . include $end
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '%'       shift, and go to state 7
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    include      go to state 9
+    raiz         go to state 10
+    libreria     go to state 11
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 1
+
+   26 sentencia: VAR . IGUAL expr
+
+    IGUAL  shift, and go to state 18
+
+
+State 2
+
+   14 funcion: FUNCION . VAR '(' parametros ')' '$' parametros
+
+    VAR  shift, and go to state 19
+
+
+State 3
+
+   20 print: PRINT . '"' variable '"'
+
+    '"'  shift, and go to state 20
+
+
+State 4
+
+   13 condicional: SI . cond DO
+
+    VAR  shift, and go to state 21
+    NUM  shift, and go to state 22
+
+    cond  go to state 23
+    two   go to state 24
+
+
+State 5
+
+   11 bucles: MIENTRAS . cond
+
+    VAR  shift, and go to state 21
+    NUM  shift, and go to state 22
+
+    cond  go to state 25
+    two   go to state 24
+
+
+State 6
+
+   12 bucles: FOR . EACH variable IN NUM
+
+    EACH  shift, and go to state 26
+
+
+State 7
+
+   10 libreria: '%' . SINTLIB '"' LIBRERIA '"'
+
+    SINTLIB  shift, and go to state 27
+
+
+State 8
+
+   19 comment: '&' . variable '&'
+
+    VAR  shift, and go to state 28
+
+    variable  go to state 29
+
+
+State 9
+
+    0 $accept: include . $end
+
+    $end  shift, and go to state 30
+
+
+State 10
+
+    1 include: raiz .
+
+    $default  reduce using rule 1 (include)
+
+
+State 11
+
+    2 include: libreria . include
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '%'       shift, and go to state 7
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    include      go to state 31
+    raiz         go to state 10
+    libreria     go to state 11
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 12
+
+    7 raiz: bucles . CA raiz CC raiz
+
+    CA  shift, and go to state 32
+
+
+State 13
+
+    8 raiz: condicional . CA raiz CC raiz
+
+    CA  shift, and go to state 33
+
+
+State 14
+
+    9 raiz: funcion . CA raiz CC raiz
+
+    CA  shift, and go to state 34
+
+
+State 15
+
+    4 raiz: comment . raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 35
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 16
+
+    6 raiz: print . raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 36
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 17
+
+    5 raiz: sentencia . raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 37
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 18
+
+   26 sentencia: VAR IGUAL . expr
+
+    VAR  shift, and go to state 38
+    NUM  shift, and go to state 39
+
+    expr  go to state 40
+    term  go to state 41
+    fact  go to state 42
+
+
+State 19
+
+   14 funcion: FUNCION VAR . '(' parametros ')' '$' parametros
+
+    '('  shift, and go to state 43
+
+
+State 20
+
+   20 print: PRINT '"' . variable '"'
+
+    VAR  shift, and go to state 28
+
+    variable  go to state 44
+
+
+State 21
+
+   25 two: VAR .
+
+    $default  reduce using rule 25 (two)
+
+
+State 22
+
+   24 two: NUM .
+
+    $default  reduce using rule 24 (two)
+
+
+State 23
+
+   13 condicional: SI cond . DO
+
+    DO  shift, and go to state 45
+
+
+State 24
+
+   21 cond: two . MAYOR two
+   22     | two . MENOR two
+   23     | two . IGUAL two
+
+    MAYOR  shift, and go to state 46
+    MENOR  shift, and go to state 47
+    IGUAL  shift, and go to state 48
+
+
+State 25
+
+   11 bucles: MIENTRAS cond .
+
+    $default  reduce using rule 11 (bucles)
+
+
+State 26
+
+   12 bucles: FOR EACH . variable IN NUM
+
+    VAR  shift, and go to state 28
+
+    variable  go to state 49
+
+
+State 27
+
+   10 libreria: '%' SINTLIB . '"' LIBRERIA '"'
+
+    '"'  shift, and go to state 50
+
+
+State 28
+
+   17 variable: VAR . variable
+   18         | VAR .
+
+    VAR  shift, and go to state 28
+
+    $default  reduce using rule 18 (variable)
+
+    variable  go to state 51
+
+
+State 29
+
+   19 comment: '&' variable . '&'
+
+    '&'  shift, and go to state 52
+
+
+State 30
+
+    0 $accept: include $end .
+
+    $default  accept
+
+
+State 31
+
+    2 include: libreria include .
+
+    $default  reduce using rule 2 (include)
+
+
+State 32
+
+    7 raiz: bucles CA . raiz CC raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 53
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 33
+
+    8 raiz: condicional CA . raiz CC raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 54
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 34
+
+    9 raiz: funcion CA . raiz CC raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 55
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 35
+
+    4 raiz: comment raiz .
+
+    $default  reduce using rule 4 (raiz)
+
+
+State 36
+
+    6 raiz: print raiz .
+
+    $default  reduce using rule 6 (raiz)
+
+
+State 37
+
+    5 raiz: sentencia raiz .
+
+    $default  reduce using rule 5 (raiz)
+
+
+State 38
+
+   34 fact: VAR .
+
+    $default  reduce using rule 34 (fact)
+
+
+State 39
+
+   33 fact: NUM .
+
+    $default  reduce using rule 33 (fact)
+
+
+State 40
+
+   26 sentencia: VAR IGUAL expr .
+   27 expr: expr . MAS term
+   28     | expr . MENOS term
+
+    MENOS  shift, and go to state 56
+    MAS    shift, and go to state 57
+
+    $default  reduce using rule 26 (sentencia)
+
+
+State 41
+
+   29 expr: term .
+   31 term: term . MULT fact
+   32     | term . DIV fact
+
+    MULT  shift, and go to state 58
+    DIV   shift, and go to state 59
+
+    $default  reduce using rule 29 (expr)
+
+
+State 42
+
+   30 term: fact .
+
+    $default  reduce using rule 30 (term)
+
+
+State 43
+
+   14 funcion: FUNCION VAR '(' . parametros ')' '$' parametros
+
+    VAR  shift, and go to state 60
+
+    parametros  go to state 61
+
+
+State 44
+
+   20 print: PRINT '"' variable . '"'
+
+    '"'  shift, and go to state 62
+
+
+State 45
+
+   13 condicional: SI cond DO .
+
+    $default  reduce using rule 13 (condicional)
+
+
+State 46
+
+   21 cond: two MAYOR . two
+
+    VAR  shift, and go to state 21
+    NUM  shift, and go to state 22
+
+    two  go to state 63
+
+
+State 47
+
+   22 cond: two MENOR . two
+
+    VAR  shift, and go to state 21
+    NUM  shift, and go to state 22
+
+    two  go to state 64
+
+
+State 48
+
+   23 cond: two IGUAL . two
+
+    VAR  shift, and go to state 21
+    NUM  shift, and go to state 22
+
+    two  go to state 65
+
+
+State 49
+
+   12 bucles: FOR EACH variable . IN NUM
+
+    IN  shift, and go to state 66
+
+
+State 50
+
+   10 libreria: '%' SINTLIB '"' . LIBRERIA '"'
+
+    LIBRERIA  shift, and go to state 67
+
+
+State 51
+
+   17 variable: VAR variable .
+
+    $default  reduce using rule 17 (variable)
+
+
+State 52
+
+   19 comment: '&' variable '&' .
+
+    $default  reduce using rule 19 (comment)
+
+
+State 53
+
+    7 raiz: bucles CA raiz . CC raiz
+
+    CC  shift, and go to state 68
+
+
+State 54
+
+    8 raiz: condicional CA raiz . CC raiz
+
+    CC  shift, and go to state 69
+
+
+State 55
+
+    9 raiz: funcion CA raiz . CC raiz
+
+    CC  shift, and go to state 70
+
+
+State 56
+
+   28 expr: expr MENOS . term
+
+    VAR  shift, and go to state 38
+    NUM  shift, and go to state 39
+
+    term  go to state 71
+    fact  go to state 42
+
+
+State 57
+
+   27 expr: expr MAS . term
+
+    VAR  shift, and go to state 38
+    NUM  shift, and go to state 39
+
+    term  go to state 72
+    fact  go to state 42
+
+
+State 58
+
+   31 term: term MULT . fact
+
+    VAR  shift, and go to state 38
+    NUM  shift, and go to state 39
+
+    fact  go to state 73
+
+
+State 59
+
+   32 term: term DIV . fact
+
+    VAR  shift, and go to state 38
+    NUM  shift, and go to state 39
+
+    fact  go to state 74
+
+
+State 60
+
+   15 parametros: VAR .
+   16           | VAR . ',' parametros
+
+    ','  shift, and go to state 75
+
+    $default  reduce using rule 15 (parametros)
+
+
+State 61
+
+   14 funcion: FUNCION VAR '(' parametros . ')' '$' parametros
+
+    ')'  shift, and go to state 76
+
+
+State 62
+
+   20 print: PRINT '"' variable '"' .
+
+    $default  reduce using rule 20 (print)
+
+
+State 63
+
+   21 cond: two MAYOR two .
+
+    $default  reduce using rule 21 (cond)
+
+
+State 64
+
+   22 cond: two MENOR two .
+
+    $default  reduce using rule 22 (cond)
+
+
+State 65
+
+   23 cond: two IGUAL two .
+
+    $default  reduce using rule 23 (cond)
+
+
+State 66
+
+   12 bucles: FOR EACH variable IN . NUM
+
+    NUM  shift, and go to state 77
+
+
+State 67
+
+   10 libreria: '%' SINTLIB '"' LIBRERIA . '"'
+
+    '"'  shift, and go to state 78
+
+
+State 68
+
+    7 raiz: bucles CA raiz CC . raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 79
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 69
+
+    8 raiz: condicional CA raiz CC . raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 80
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 70
+
+    9 raiz: funcion CA raiz CC . raiz
+
+    VAR       shift, and go to state 1
+    FUNCION   shift, and go to state 2
+    PRINT     shift, and go to state 3
+    SI        shift, and go to state 4
+    MIENTRAS  shift, and go to state 5
+    FOR       shift, and go to state 6
+    '&'       shift, and go to state 8
+
+    $default  reduce using rule 3 (raiz)
+
+    raiz         go to state 81
+    bucles       go to state 12
+    condicional  go to state 13
+    funcion      go to state 14
+    comment      go to state 15
+    print        go to state 16
+    sentencia    go to state 17
+
+
+State 71
+
+   28 expr: expr MENOS term .
+   31 term: term . MULT fact
+   32     | term . DIV fact
+
+    MULT  shift, and go to state 58
+    DIV   shift, and go to state 59
+
+    $default  reduce using rule 28 (expr)
+
+
+State 72
+
+   27 expr: expr MAS term .
+   31 term: term . MULT fact
+   32     | term . DIV fact
+
+    MULT  shift, and go to state 58
+    DIV   shift, and go to state 59
+
+    $default  reduce using rule 27 (expr)
+
+
+State 73
+
+   31 term: term MULT fact .
+
+    $default  reduce using rule 31 (term)
+
+
+State 74
+
+   32 term: term DIV fact .
+
+    $default  reduce using rule 32 (term)
+
+
+State 75
+
+   16 parametros: VAR ',' . parametros
+
+    VAR  shift, and go to state 60
+
+    parametros  go to state 82
+
+
+State 76
+
+   14 funcion: FUNCION VAR '(' parametros ')' . '$' parametros
+
+    '$'  shift, and go to state 83
+
+
+State 77
+
+   12 bucles: FOR EACH variable IN NUM .
+
+    $default  reduce using rule 12 (bucles)
+
+
+State 78
+
+   10 libreria: '%' SINTLIB '"' LIBRERIA '"' .
+
+    $default  reduce using rule 10 (libreria)
+
+
+State 79
+
+    7 raiz: bucles CA raiz CC raiz .
+
+    $default  reduce using rule 7 (raiz)
+
+
+State 80
+
+    8 raiz: condicional CA raiz CC raiz .
+
+    $default  reduce using rule 8 (raiz)
+
+
+State 81
+
+    9 raiz: funcion CA raiz CC raiz .
+
+    $default  reduce using rule 9 (raiz)
+
+
+State 82
+
+   16 parametros: VAR ',' parametros .
+
+    $default  reduce using rule 16 (parametros)
+
+
+State 83
+
+   14 funcion: FUNCION VAR '(' parametros ')' '$' . parametros
+
+    VAR  shift, and go to state 60
+
+    parametros  go to state 84
+
+
+State 84
+
+   14 funcion: FUNCION VAR '(' parametros ')' '$' parametros .
+
+    $default  reduce using rule 14 (funcion)
